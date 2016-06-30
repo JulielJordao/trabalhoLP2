@@ -6,7 +6,7 @@ import dao.AcompanhamentoDao;
 import entidade.Acompanhamento;
 
 public class BLLAcompanhamento {
-
+ 
 	public int salvar(Acompanhamento entidade) {
 		return new AcompanhamentoDao().salvar(entidade);
 	}

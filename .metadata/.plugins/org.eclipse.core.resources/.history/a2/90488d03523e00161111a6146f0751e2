@@ -1,0 +1,84 @@
+package visao;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+public class TelaFecharPedido extends JFrame {
+	private JTextField tfCodigo;
+	private JTextField tfTelefone;
+	private JTextField tfMesa;
+	private String mensagem;
+	
+	TelaFecharPedido() {
+		super("Informações finais");
+		setSize(372, 233);
+		getContentPane().setLayout(null);
+		
+		tfCodigo = new JTextField();
+		tfCodigo.setBounds(137, 30, 70, 20);
+		getContentPane().add(tfCodigo);
+		tfCodigo.setColumns(10);
+		
+		tfTelefone = new JTextField();
+		tfTelefone.setBounds(23, 79, 184, 20);
+		getContentPane().add(tfTelefone);
+		tfTelefone.setColumns(10);
+		
+		tfMesa = new JTextField();
+		tfMesa.setBounds(23, 30, 86, 20);
+		getContentPane().add(tfMesa);
+		tfMesa.setColumns(10);
+		
+		JLabel lblCdigo = new JLabel("C\u00F3digo");
+		lblCdigo.setBounds(23, 11, 46, 14);
+		getContentPane().add(lblCdigo);
+		
+		JLabel lblinsiraOCdigo = new JLabel("*Insira o c\u00F3digo gerado de pedidos anteriores ou insira");
+		lblinsiraOCdigo.setBounds(22, 110, 362, 14);
+		getContentPane().add(lblinsiraOCdigo);
+		
+		JLabel lblMesa = new JLabel("Mesa");
+		lblMesa.setBounds(137, 11, 46, 14);
+		getContentPane().add(lblMesa);
+		
+		JLabel lblTelefone = new JLabel("Telefone");
+		lblTelefone.setBounds(23, 61, 46, 14);
+		getContentPane().add(lblTelefone);
+		
+		JButton btnConfirmarDados = new JButton("Confirmar Dados");
+		btnConfirmarDados.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				setVisible(false);
+				JOptionPane.showMessageDialog(null, mensagem);
+				
+			}
+		});
+		btnConfirmarDados.setBounds(179, 155, 159, 23);
+		getContentPane().add(btnConfirmarDados);
+		
+		JLabel lblCompraOuCadastre = new JLabel("um novo telefone para se gerar um novo c\u00F3digo de cadastro!");
+		lblCompraOuCadastre.setBounds(23, 127, 312, 14);
+		getContentPane().add(lblCompraOuCadastre);
+		int tempo_total_espera;
+		
+		
+	}
+	
+	public void setMensagem(String msg){
+		mensagem = msg;
+	}
+	
+	public String gerarCodAleatorio(){
+		long valor = 0;
+		String codigo = Long.toHexString(255);
+		
+		return mensagem;
+		
+	}
+}

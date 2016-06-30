@@ -14,7 +14,7 @@ import entidade.Pedido;
 public class PedidoDao implements IDAOCrud<Pedido> {
 	
 	public int salvar(Pedido entidade) {
-
+ 
 		Connection conexao = new Conexao().geraConexao();
 		PreparedStatement sqlParametro = null;
 		int codigo = 0;

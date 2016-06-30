@@ -1,5 +1,50 @@
 package entidade;
 
-public class CadastroCompra {
+import java.sql.Date;
+import java.sql.Time;
 
+public class CadastroCompra {
+	private int cod_cad_compra;
+	private String cod_esp;
+	private long telefone;
+	private int mesa;
+	private Date datPedido;
+	private Time horPedido;
+	public String getCod_esp() {
+		return cod_esp;
+	}
+	public void setCod_esp(String cod_esp) {
+		this.cod_esp = cod_esp;
+	}
+	public long getTelefone() {
+		return telefone;
+	}
+	public void setTelefone(long telefone) {
+		this.telefone = telefone;
+	}
+	public int getCod_cad_compra() {
+		return cod_cad_compra;
+	}
+	public void setCod_cad_compra(int cod_cad_compra) {
+		this.cod_cad_compra = cod_cad_compra;
+	}
+	public int getMesa() {
+		return mesa;
+	}
+	public void setMesa(int mesa) {
+		this.mesa = mesa;
+	}
+	public Date getDatPedido() {
+		return datPedido;
+	}
+	public void setDatPedido(Date datPedido) {
+		this.datPedido = datPedido;
+	}
+	public Time getHorPedido() {
+		return horPedido;
+	}
+	public void setHorPedido(Time horPedido) {
+		this.horPedido = horPedido;
+	}
+	
 }

@@ -92,6 +92,7 @@ public class AcompanhamentoDao {
 				entidade.setVal_acomp(resultado.getDouble("val_acomp"));
 				entidade.setNom_acomp(resultado.getString("nom_acomp"));
 				entidade.setCod_promocao(resultado.getInt("cod_promocao"));
+				entidade.setTempo_espera(resultado.getInt("tempo_espera"));
 				lista.add(entidade);
 			}
 		} catch (SQLException e) {
@@ -126,6 +127,7 @@ public class AcompanhamentoDao {
 				entidade.setVal_acomp(resultado.getDouble("val_acomp"));
 				entidade.setNom_acomp(resultado.getString("nom_acomp"));
 				entidade.setCod_promocao(resultado.getInt("cod_promocao"));
+				entidade.setTempo_espera(resultado.getInt("tempo_espera"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -159,6 +161,7 @@ public class AcompanhamentoDao {
 				entidade.setVal_acomp(resultado.getDouble("val_acomp"));
 				entidade.setNom_acomp(resultado.getString("nom_acomp"));
 				entidade.setCod_promocao(resultado.getInt("cod_promocao"));
+				entidade.setTempo_espera(resultado.getInt("tempo_espera"));
 				lista.add(entidade);
 			}
 		} catch (SQLException e) {

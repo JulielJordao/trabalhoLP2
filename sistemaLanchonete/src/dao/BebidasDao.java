@@ -93,6 +93,7 @@ public class BebidasDao {
 				entidade.setVal_bebida(resultado.getDouble("val_bebida"));
 				entidade.setNom_bebida(resultado.getString("nom_bebida"));
 				entidade.setCod_promocao(resultado.getInt("cod_promocao"));
+				entidade.setTempo_espera(resultado.getInt("tempo_espera"));
 				lista.add(entidade);
 			}
 		} catch (SQLException e) {
@@ -127,6 +128,7 @@ public class BebidasDao {
 				entidade.setVal_bebida(resultado.getDouble("val_bebida"));
 				entidade.setNom_bebida(resultado.getString("nom_bebida"));
 				entidade.setCod_promocao(resultado.getInt("cod_promocao"));
+				entidade.setTempo_espera(resultado.getInt("tempo_espera"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -160,6 +162,7 @@ public class BebidasDao {
 				entidade.setVal_bebida(resultado.getDouble("val_bebida"));
 				entidade.setNom_bebida(resultado.getString("nom_bebida"));
 				entidade.setCod_promocao(resultado.getInt("cod_promocao"));
+				entidade.setTempo_espera(resultado.getInt("tempo_espera"));
 				lista.add(entidade);
 			}
 		} catch (SQLException e) {

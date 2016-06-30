@@ -29,6 +29,7 @@ public class ItemPedidoDao implements IDAOCrud<ItemPedido>{
 					sqlParametro.setString(2, entidade.getTipo());
 					sqlParametro.setInt(3, entidade.getCod_pedido());
 					sqlParametro.setDouble(4, entidade.getVal_item());
+					
 					sqlParametro.executeUpdate();
 					sql = "select last_insert_id() as Codigo";
 					sqlParametro = conexao.prepareStatement(sql);

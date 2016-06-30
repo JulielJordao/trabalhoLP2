@@ -10,7 +10,7 @@ public class BLLPedido implements IBLLCrud<Pedido> {
 	public int salvar(Pedido entidade) {
 		return new PedidoDao().salvar(entidade);
 	}
-
+ 
 	public boolean excluir(Pedido entidade) {
 		return new PedidoDao().excluir(entidade);
 	}

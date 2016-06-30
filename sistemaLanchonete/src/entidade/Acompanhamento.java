@@ -5,6 +5,7 @@ public class Acompanhamento {
 	private int cod_promocao;
 	private String nom_acomp;
 	private double val_acomp;
+	private int tempo_espera;
 	
 	public int getCod_acomp() {
 		return cod_acomp;
@@ -29,6 +30,12 @@ public class Acompanhamento {
 	}
 	public void setVal_acomp(double val_acomp) {
 		this.val_acomp = val_acomp;
+	}
+	public int getTempo_espera() {
+		return tempo_espera;
+	}
+	public void setTempo_espera(int tempo_espera) {
+		this.tempo_espera = tempo_espera;
 	}
 	
 }

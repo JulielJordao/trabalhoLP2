@@ -1,0 +1,41 @@
+package visao;
+
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+
+public class TelaFecharPedido extends JFrame {
+	private JTextField tfCodigo;
+	private JTextField tfTelefone;
+	private JTextField tfMesa;
+
+	TelaFecharPedido() {
+		super("Informações finais");
+		setSize(454, 220);
+		getContentPane().setLayout(null);
+		
+		tfCodigo = new JTextField();
+		tfCodigo.setBounds(137, 30, 70, 20);
+		getContentPane().add(tfCodigo);
+		tfCodigo.setColumns(10);
+		
+		tfTelefone = new JTextField();
+		tfTelefone.setBounds(23, 79, 184, 20);
+		getContentPane().add(tfTelefone);
+		tfTelefone.setColumns(10);
+		
+		tfMesa = new JTextField();
+		tfMesa.setBounds(23, 30, 86, 20);
+		getContentPane().add(tfMesa);
+		tfMesa.setColumns(10);
+		
+		JLabel lblCdigo = new JLabel("C\u00F3digo");
+		lblCdigo.setBounds(23, 11, 46, 14);
+		getContentPane().add(lblCdigo);
+		
+		JLabel lblinsiraOCdigo = new JLabel("*Insira o c\u00F3digo de outra compra ou cadastre novamento com o \\n seu telefone");
+		lblinsiraOCdigo.setBounds(23, 144, 362, 14);
+		getContentPane().add(lblinsiraOCdigo);
+		int tempo_total_espera;
+	}
+}

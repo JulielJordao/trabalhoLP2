@@ -6,7 +6,7 @@ import dao.BebidasDao;
 import entidade.Bebida;
 
 public class BLLBebida {
-	
+	 
 	public int salvar(Bebida entidade) {
 		return new BebidasDao().salvar(entidade);
 	}

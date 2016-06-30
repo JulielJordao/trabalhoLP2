@@ -7,6 +7,7 @@ public class Promocao {
 	public int getCod_promocao() {
 		return cod_promocao;
 	}
+	
 	public void setCod_promocao(int cod_promocao) {
 		this.cod_promocao = cod_promocao;
 	}

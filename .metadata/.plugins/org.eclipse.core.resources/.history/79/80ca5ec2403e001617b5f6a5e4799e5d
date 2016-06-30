@@ -1,0 +1,19 @@
+package visao;
+
+import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.JButton;
+
+public class PainelAdministrativo extends JFrame {
+	public PainelAdministrativo() {
+		super("Painel Administrativo");
+		getContentPane().setLayout(null);
+		JTable tabAdministrativo = new JTable(6,6);
+		tabAdministrativo.setBounds(10, 68, 412, 96);
+		getContentPane().add(tabAdministrativo);
+		
+		JButton btnModficarEntregues = new JButton("Modficar Entregues");
+		btnModficarEntregues.setBounds(297, 181, 125, 23);
+		getContentPane().add(btnModficarEntregues);
+	}
+}

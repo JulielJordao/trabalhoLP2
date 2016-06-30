@@ -10,7 +10,7 @@ public class BLLPromocao {
 	public int salvar(Promocao entidade) {
 		return new PromocaoDao().salvar(entidade);
 	}
-
+ 
 	public boolean excluir(Promocao entidade) {
 		return new PromocaoDao().excluir(entidade);
 	}

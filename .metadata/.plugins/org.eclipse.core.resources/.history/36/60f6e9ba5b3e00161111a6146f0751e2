@@ -1,0 +1,27 @@
+package entidade;
+
+public class CadastroCompra {
+	private int cod_cad_compra;
+	private String cod_esp;
+	private long telefone;
+	
+	public String getCod_esp() {
+		return cod_esp;
+	}
+	public void setCod_esp(String cod_esp) {
+		this.cod_esp = cod_esp;
+	}
+	public long getTelefone() {
+		return telefone;
+	}
+	public void setTelefone(long telefone) {
+		this.telefone = telefone;
+	}
+	public int getCod_cad_compra() {
+		return cod_cad_compra;
+	}
+	public void setCod_cad_compra(int cod_cad_compra) {
+		this.cod_cad_compra = cod_cad_compra;
+	}
+	
+}

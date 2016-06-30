@@ -6,7 +6,7 @@ public class ItemPedido {
 	private int cod_pedido;
 	private int cod_item;
 	private double val_item;
-	
+		
 	public int getCod_item() {
 		return cod_item;
 	}

@@ -1,0 +1,181 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import util.Conexao;
+import entidade.CadastroCompra;
+
+public class CadastroCompraDao {
+
+	 public int salvar(CadastroCompra entidade) {
+	
+	 Connection conexao = new Conexao().geraConexao();
+	 PreparedStatement sqlParametro = null;
+	 ResultSet resultado = null;
+	 int codigo = 0;
+	 String sql;
+	
+	 try {
+	 if(entidade.getCod_Cad_Compra() == 0){
+	 sql = "insert into cadastroCompra(cod_cad_compra, val_CadastroCompra);
+	 nom_CadastroCompra, cod_promocao) values(?, ?, ?, ?);";
+	 sqlParametro = conexao.prepareStatement(sql);
+	 sqlParametro.setInt(1, entidade.getCod_CadastroCompra());
+	 sqlParametro.setDouble(2, entidade.getVal_CadastroCompra());
+	 sqlParametro.setString(3, entidade.getNom_CadastroCompra());
+	 sqlParametro.setInt(4, entidade.getCod_promocao());
+	 sqlParametro.executeUpdate();
+	 sql = "select last_insert_id() as Codigo";
+	 sqlParametro = conexao.prepareStatement(sql);
+	 resultado = sqlParametro.executeQuery();
+	 if (resultado.next()) {
+	 codigo = resultado.getInt("Codigo");
+	 entidade.setCod_CadastroCompra(codigo);
+	 }
+	 }
+	 } catch (SQLException e) {
+	 e.printStackTrace();
+	 } finally {
+	 try {
+	 sqlParametro.close();
+	 conexao.close();
+	 } catch (Throwable e) {
+	 e.printStackTrace();
+	 }
+	 }
+	 return codigo;
+	 }
+	
+	 public boolean excluir(CadastroCompra entidade) {
+	
+	 Connection conexao = new Conexao().geraConexao();
+	 PreparedStatement sqlParametro = null;
+	 String sql;
+	 boolean teste = false;
+	 try {
+	 sql = "delete from CadastroCompra where cod_CadastroCompra = ?;";
+	 sqlParametro = conexao.prepareStatement(sql);
+	 sqlParametro.setInt(1, entidade.getCod_CadastroCompra());
+	 sqlParametro.executeUpdate();
+	 } catch (SQLException e) {
+	 e.printStackTrace();
+	 } finally {
+	 try {
+	 sqlParametro.close();
+	 conexao.close();
+	 teste = true;
+	 } catch (Throwable e) {
+	 e.printStackTrace();
+	 }
+	 }
+	 return teste;
+	 }
+	
+	 public ArrayList<CadastroCompra> listar() {
+	
+	 Connection conexao = new Conexao().geraConexao();
+	 ArrayList<CadastroCompra> lista = new ArrayList<CadastroCompra>();
+	 Statement consulta = null;
+	 ResultSet resultado = null;
+	 CadastroCompra entidade = null;
+	 String sql;
+	 try {
+	 sql = "select * from CadastroCompra order by cod_CadastroCompra;";
+	 consulta = conexao.createStatement();
+	 resultado = consulta.executeQuery(sql);
+	 while (resultado.next()) {
+	 entidade = new CadastroCompra();
+	 entidade.setCod_CadastroCompra(resultado.getInt("cod_CadastroCompra"));
+	 entidade.setVal_CadastroCompra(resultado.getDouble("val_CadastroCompra"));
+	 entidade.setNom_CadastroCompra(resultado.getString("nom_CadastroCompra"));
+	 entidade.setCod_promocao(resultado.getInt("cod_promocao"));
+	 lista.add(entidade);
+	 }
+	 } catch (SQLException e) {
+	 e.printStackTrace();
+	 } finally {
+	 try {
+	 consulta.close();
+	 resultado.close();
+	 conexao.close();
+	 } catch (Throwable e) {
+	 e.printStackTrace();
+	 }
+	 }
+	 return lista;
+	 }
+	
+	 public CadastroCompra buscarPorCodigo(int codigo) {
+	
+	 Connection conexao = new Conexao().geraConexao();
+	 PreparedStatement consulta = null;
+	 ResultSet resultado = null;
+	 CadastroCompra entidade = null;
+	 String sql;
+	 try {
+	 sql = "select * from CadastroCompra where cod_CadastroCompra = ?;";
+	 consulta = conexao.prepareStatement(sql);
+	 consulta.setInt(1, codigo);
+	 resultado = consulta.executeQuery();
+	 if (resultado.next()) {
+	 entidade = new CadastroCompra();
+	 entidade.setCod_CadastroCompra(resultado.getInt("cod_CadastroCompra"));
+	 entidade.setVal_CadastroCompra(resultado.getDouble("val_CadastroCompra"));
+	 entidade.setNom_CadastroCompra(resultado.getString("nom_CadastroCompra"));
+	 entidade.setCod_promocao(resultado.getInt("cod_promocao"));
+	 }
+	 } catch (SQLException e) {
+	 e.printStackTrace();
+	 } finally {
+	 try {
+	 consulta.close();
+	 resultado.close();
+	 conexao.close();
+	 } catch (Throwable e) {
+	 e.printStackTrace();
+	 }
+	 }
+	 return entidade;
+	 }
+	 public ArrayList<CadastroCompra> buscarPorPromocao(int codigo){
+	 Connection conexao = new Conexao().geraConexao();
+	 PreparedStatement consulta = null;
+	 ResultSet resultado = null;
+	 CadastroCompra entidade = null;
+	 ArrayList<CadastroCompra> lista = new ArrayList<CadastroCompra>();
+	 String sql;
+	 try {
+	 sql = "select * from CadastroCompra where cod_promocao = ?;";
+	 consulta = conexao.prepareStatement(sql);
+	 consulta.setInt(1, codigo);
+	 resultado = consulta.executeQuery();
+	 while (resultado.next()) {
+	 entidade = new CadastroCompra();
+	 entidade.setCod_CadastroCompra(resultado.getInt("cod_CadastroCompra"));
+	 entidade.setVal_CadastroCompra(resultado.getDouble("val_CadastroCompra"));
+	 entidade.setNom_CadastroCompra(resultado.getString("nom_CadastroCompra"));
+	 entidade.setCod_promocao(resultado.getInt("cod_promocao"));
+	 lista.add(entidade);
+	 }
+	 } catch (SQLException e) {
+	 e.printStackTrace();
+	 } finally {
+	 try {
+	 consulta.close();
+	 resultado.close();
+	 conexao.close();
+	 } catch (Throwable e) {
+	 e.printStackTrace();
+	 }
+	 }
+	 return lista;
+	
+	 }
+
+}

@@ -78,13 +78,15 @@ public class Principal extends JFrame {
 	JMenuItem sair;
 	JMenu opcoes;
 	JMenuItem sobre;
+	int tempo_espera = 0;
+	TelaFecharPedido telaFecharPedido = new TelaFecharPedido();
 
 	public Principal() {
 
 		super("Lanchone BBurger");
 
 		getContentPane().setLayout(null);
-		setSize(715, 502);
+		setSize(730, 519);
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(660, 403, 2, -400);
 		getContentPane().add(scrollPane);
@@ -100,6 +102,7 @@ public class Principal extends JFrame {
 		getContentPane().add(rbOferta1);
 
 		rbOferta2 = new JRadioButton("Promo\u00E7\u00E3o do dia");
+//		Ação efetuado ao clicar no desconto do dia
 		rbOferta2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (rbOferta1.isSelected()) {
@@ -110,6 +113,7 @@ public class Principal extends JFrame {
 				addComboBox();
 			}
 		});
+//		Ação a ser aplicada ao clicar nas ofertas da semana
 		rbOferta1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (rbOferta2.isSelected()) {
@@ -128,21 +132,20 @@ public class Principal extends JFrame {
 		JButton jbLimpar = new JButton("Limpar");
 		jbLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ValorConta.setText("");
-				dadosCompra.setText("");
-
-				text = "";
-				adicionarComboBox(bebida, lanche, acomp);
+				limpar();
 
 			}
 		});
 		jbLimpar.setBounds(418, 348, 102, 37);
 		getContentPane().add(jbLimpar);
 
+		
+		// Botão Fechar Pedido(Finalizar) com o action_list
 		JButton jbFecharPedido = new JButton("Fechar Pedido");
 		jbFecharPedido.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int codigo = 0;
+				// obtem o código da última venda salva no banco de dados
 				codigo = obterCodUltimoPedido();
 				codigo += 1;
 				System.out.println("Código:"+codigo);
@@ -160,9 +163,16 @@ public class Principal extends JFrame {
 				for(ItemPedido itemPedid : ip){
 					itemPedido.salvar(itemPedid);
 				}
-				JOptionPane.showMessageDialog(null, "Pedido realizado com sucesso! Tirando imagem... \nEm breve seu pedido será entregue!");
+				
+				//limpeza da tela
+				limpar();
+				telaFecharPedido.setMensagem("Pedido realizado com sucesso! Tempo estimado de espera para entrega total do pedido: "+tempo_espera+"min");
+				telaFecharPedido.setCodCompra(codigo);
+				telaFecharPedido.setVisible(true);
+			
 			}
 		});
+		
 		jbFecharPedido.setBounds(553, 348, 137, 37);
 		getContentPane().add(jbFecharPedido);
 
@@ -191,7 +201,7 @@ public class Principal extends JFrame {
 		getContentPane().add(cbBebida);
 
 		ValorConta = new JTextField();
-		ValorConta.setBounds(444, 317, 206, 20);
+		ValorConta.setBounds(429, 317, 261, 20);
 		getContentPane().add(ValorConta);
 		ValorConta.setColumns(10);
 
@@ -202,7 +212,7 @@ public class Principal extends JFrame {
 		JLabel foto = new JLabel("");
 		foto.setIcon(new ImageIcon("src\\util\\sem-foto_800.jpg"));
 
-		foto.setBounds(468, 91, 182, 165);
+		foto.setBounds(480, 97, 182, 165);
 		getContentPane().add(foto);
 
 		JLabel lblFotoParaReconhecimento = new JLabel(
@@ -312,8 +322,11 @@ public class Principal extends JFrame {
 
 	public static void main(String args[]) {
 		new Principal();
+		
 	}
 
+	
+	
 	public int obterCodUltimoPedido() {
 		Connection conexao = new Conexao().geraConexao();
 		PreparedStatement sqlParametro = null;
@@ -345,6 +358,7 @@ public class Principal extends JFrame {
 
 	}
 
+//	Verifica se nenhum checkbox foi selecionado
 	public boolean notSelect() {
 		if (rbOferta1.isSelected() == true || rbOferta2.isSelected() == true) {
 			return false;
@@ -353,6 +367,7 @@ public class Principal extends JFrame {
 		}
 	}
 
+	
 	public void removeAll() {
 		
 			while(ip.isEmpty() == false){
@@ -425,6 +440,7 @@ public class Principal extends JFrame {
 		}
 	}
 
+	//acao efetuada sempre que uma opcao for alterada na tela, por exemplo quando escolher listar itens pela oferta
 	public double atualizarValor() {
 		double resultado = 0;
 		double valorDesconto = 0;
@@ -464,6 +480,7 @@ public class Principal extends JFrame {
 			text += "\nItem:" + acomp.get(i).getNom_acomp() + "|Valor: R$"
 					+ acomp.get(i).getVal_acomp();
 		}
+		calcularTempoEspera(acomp.get(i).getTempo_espera());
 		ip.add(itPedido);
 		dadosCompra.setText(text);
 	}
@@ -485,6 +502,7 @@ public class Principal extends JFrame {
 			text += "\nItem:" + bebida.get(i).getNom_bebida() + "|Valor: R$"
 					+ bebida.get(i).getVal_bebida();
 		}
+		calcularTempoEspera(bebida.get(i).getTempo_espera());
 		ip.add(itPedido);
 		dadosCompra.setText(text);
 	}
@@ -506,6 +524,7 @@ public class Principal extends JFrame {
 			text += "\nItem:" + lanche.get(i).getNom_lanche() + "|Valor: R$"
 					+ lanche.get(i).getVal_lanche();
 		}
+		calcularTempoEspera(lanche.get(i).getTempo_espera());
 		ip.add(itPedido);
 		dadosCompra.setText(text);
 	}
@@ -538,5 +557,19 @@ public class Principal extends JFrame {
 		System.out.println(codigo);
 
 		return codigo;
+	}
+	
+	public void calcularTempoEspera(int tempo_item){
+		if(tempo_item>tempo_espera){
+			tempo_espera = tempo_item;
+		}
+	}
+	
+	public void limpar(){
+		ValorConta.setText("");
+		dadosCompra.setText("");
+
+		text = "";
+		adicionarComboBox(bebida, lanche, acomp);
 	}
 }

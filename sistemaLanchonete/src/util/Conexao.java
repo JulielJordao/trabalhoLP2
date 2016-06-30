@@ -12,7 +12,7 @@ public class Conexao {
 		String usuario = "root";
 		String senha = "";
 		try {
-			conexao = DriverManager.getConnection(url, usuario, senha);
+		 	conexao = DriverManager.getConnection(url, usuario, senha);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

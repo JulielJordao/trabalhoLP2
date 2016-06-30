@@ -5,7 +5,8 @@ public class Lanche {
 	private int cod_promocao;
 	private String nom_lanche;
 	private double val_lanche;
-
+	private int tempo_espera;
+	
 	public int getCod_lanche() {
 		return cod_lanche;
 	}
@@ -36,5 +37,13 @@ public class Lanche {
 
 	public void setVal_lanche(double val_lanche) {
 		this.val_lanche = val_lanche;
+	}
+
+	public int getTempo_espera() {
+		return tempo_espera;
+	}
+
+	public void setTempo_espera(int tempo_espera) {
+		this.tempo_espera = tempo_espera;
 	}
 }

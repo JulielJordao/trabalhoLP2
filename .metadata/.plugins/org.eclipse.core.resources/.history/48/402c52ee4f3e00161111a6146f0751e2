@@ -1,0 +1,32 @@
+package visao;
+
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+
+public class TelaFecharPedido extends JFrame {
+	private JTextField codigo;
+	private JTextField textField_1;
+	private JTextField tfMesa;
+
+	TelaFecharPedido() {
+		super("Informações finais");
+		setSize(340, 213);
+		getContentPane().setLayout(null);
+		
+		codigo = new JTextField();
+		codigo.setBounds(137, 30, 70, 20);
+		getContentPane().add(codigo);
+		codigo.setColumns(10);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(23, 79, 216, 20);
+		getContentPane().add(textField_1);
+		textField_1.setColumns(10);
+		
+		tfMesa = new JTextField();
+		tfMesa.setBounds(23, 30, 86, 20);
+		getContentPane().add(tfMesa);
+		tfMesa.setColumns(10);
+		int tempo_total_espera;
+	}
+}

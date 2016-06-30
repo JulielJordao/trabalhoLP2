@@ -1,0 +1,571 @@
+package visao;
+
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import util.Conexao;
+import controle.BLLAcompanhamento;
+import controle.BLLBebida;
+import controle.BLLItemPedido;
+import controle.BLLLanche;
+import controle.BLLPedido;
+import entidade.Acompanhamento;
+import entidade.Bebida;
+import entidade.ItemPedido;
+import entidade.Lanche;
+import entidade.Pedido;
+
+public class Principal extends JFrame {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	JTable pedido = new JTable();
+	JTextField valor = new JTextField();
+	ImageIcon image = new ImageIcon();
+	ArrayList<ItemPedido> ip = new ArrayList<ItemPedido>();
+	ArrayList<Bebida> bebida = new ArrayList<Bebida>();
+	ArrayList<Lanche> lanche = new ArrayList<Lanche>();
+	ArrayList<Acompanhamento> acomp = new ArrayList<Acompanhamento>();
+	String temp = "";
+	BLLBebida b = new BLLBebida();
+	BLLLanche l = new BLLLanche();
+	BLLAcompanhamento a = new BLLAcompanhamento();
+	BLLPedido gerarPedido = new BLLPedido();
+	BLLItemPedido itemPedido = new BLLItemPedido();
+	Pedido ped = new Pedido();
+	int contBebida = 1;
+	int contLanche = 1;
+	int contAcomp = 1;
+	int numPedido;
+	private JTextField ValorConta;
+	protected int cont = 0;
+	JRadioButton rbOferta1;
+	JRadioButton rbOferta2;
+	JComboBox<Object> cbAcompanhamento;
+	JComboBox<Object> cbLanche;
+	JComboBox<Object> cbBebida;
+	JTextArea dadosCompra;
+	String text;
+	JMenuBar menuBar;
+	JMenuItem sair;
+	JMenu opcoes;
+	JMenuItem sobre;
+	int tempo_espera = 0;
+	TelaFecharPedido = new TelaFecharPedido();
+
+	public Principal() {
+
+		super("Lanchone BBurger");
+
+		getContentPane().setLayout(null);
+		setSize(715, 502);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(660, 403, 2, -400);
+		getContentPane().add(scrollPane);
+
+		JLabel lbPedido = new JLabel("Fa\u00E7a seu pedido:");
+		lbPedido.setFont(new Font("BankGothic Md BT", Font.BOLD, 15));
+		lbPedido.setBounds(27, 26, 242, 20);
+		getContentPane().add(lbPedido);
+
+		rbOferta1 = new JRadioButton("Oferta semanal");
+		rbOferta1.setSelected(false);
+		rbOferta1.setBounds(27, 251, 137, 23);
+		getContentPane().add(rbOferta1);
+
+		rbOferta2 = new JRadioButton("Promo\u00E7\u00E3o do dia");
+//		Ação efetuado ao clicar no desconto do dia
+		rbOferta2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (rbOferta1.isSelected()) {
+					rbOferta1.setSelected(false);
+				}
+				removeAll();
+				removerComboBox();
+				addComboBox();
+			}
+		});
+//		Ação a ser aplicada ao clicar nas ofertas da semana
+		rbOferta1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (rbOferta2.isSelected()) {
+					rbOferta2.setSelected(false);
+				}
+				removeAll();
+				removerComboBox();
+				addComboBox();
+
+			}
+		});
+		rbOferta2.setSelected(false);
+		rbOferta2.setBounds(166, 251, 141, 23);
+		getContentPane().add(rbOferta2);
+
+		JButton jbLimpar = new JButton("Limpar");
+		jbLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limpar();
+
+			}
+		});
+		jbLimpar.setBounds(418, 348, 102, 37);
+		getContentPane().add(jbLimpar);
+
+		
+		// Botão Fechar Pedido(Finalizar) com o action_list
+		JButton jbFecharPedido = new JButton("Fechar Pedido");
+		jbFecharPedido.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int codigo = 0;
+				// obtem o código da última venda salva no banco de dados
+				codigo = obterCodUltimoPedido();
+				codigo += 1;
+				System.out.println("Código:"+codigo);
+				if (rbOferta1.isSelected()){
+					ped.setCod_desconto(1);
+				}else if(rbOferta2.isSelected()){
+					ped.setCod_desconto(2);
+				}else if(rbOferta1.isSelected() == false  && rbOferta2.isSelected() == false){
+					ped.setCod_desconto(3);
+				}
+				ped.setVal_pedido(atualizarValor());
+				System.out.println("Cod_desconto:" + ped.getCod_desconto()+"|ped.val_pedido:"+ped.getVal_pedido());
+				gerarPedido.salvar(ped);
+				
+				for(ItemPedido itemPedid : ip){
+					itemPedido.salvar(itemPedid);
+				}
+				//limpeza da tela
+				limpar();
+				JOptionPane.showMessageDialog(null, "Pedido realizado com sucesso! Tempo estimado de espera para entrega total do pedido: "+tempo_espera+"min");
+			}
+		});
+		
+		jbFecharPedido.setBounds(553, 348, 137, 37);
+		getContentPane().add(jbFecharPedido);
+
+		cbAcompanhamento = new JComboBox<Object>();
+		cbAcompanhamento.setBounds(25, 82, 270, 20);
+		getContentPane().add(cbAcompanhamento);
+
+		JLabel lblAcompanhamento = new JLabel("Acompanhamento");
+		lblAcompanhamento.setBounds(27, 57, 122, 14);
+		getContentPane().add(lblAcompanhamento);
+
+		JLabel lbLanche = new JLabel("Lanche");
+		lbLanche.setBounds(27, 117, 46, 14);
+		getContentPane().add(lbLanche);
+
+		cbLanche = new JComboBox<Object>();
+		cbLanche.setBounds(27, 141, 268, 20);
+		getContentPane().add(cbLanche);
+
+		JLabel lblBebida = new JLabel("Bebida");
+		lblBebida.setBounds(27, 172, 46, 14);
+		getContentPane().add(lblBebida);
+
+		cbBebida = new JComboBox<Object>();
+		cbBebida.setBounds(27, 197, 268, 20);
+		getContentPane().add(cbBebida);
+
+		ValorConta = new JTextField();
+		ValorConta.setBounds(429, 317, 122, 20);
+		getContentPane().add(ValorConta);
+		ValorConta.setColumns(10);
+
+		JLabel lblValor = new JLabel("Valor:");
+		lblValor.setBounds(391, 323, 66, 14);
+		getContentPane().add(lblValor);
+
+		JLabel foto = new JLabel("");
+		foto.setIcon(new ImageIcon("src\\util\\sem-foto_800.jpg"));
+
+		foto.setBounds(468, 91, 182, 165);
+		getContentPane().add(foto);
+
+		JLabel lblFotoParaReconhecimento = new JLabel(
+				"Foto  para reconhecimento");
+		lblFotoParaReconhecimento.setFont(new Font("Arial", Font.ITALIC, 11));
+		lblFotoParaReconhecimento.setBounds(478, 255, 227, 14);
+		getContentPane().add(lblFotoParaReconhecimento);
+
+		JLabel lblObsCasoNenhum = new JLabel(
+				"Obs: Caro Cliente, se nenhuma op\u00E7\u00E3o de promo\u00E7\u00E3o for escolhida o usu\u00E1rio ");
+
+		lblObsCasoNenhum.setBounds(27, 403, 680, 37);
+		getContentPane().add(lblObsCasoNenhum);
+
+		JLabel lblObsDois = new JLabel(
+				"poder\u00E1 adicionar o lanche a sua escolha, porém sem descontos no pagamento!");
+		lblObsDois.setBounds(25, 430, 458, 14);
+		getContentPane().add(lblObsDois);
+
+		JButton addAcompanhamento = new JButton("Adicionar");
+		addAcompanhamento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				adicionarAcomp();
+				atualizarValor();
+			}
+		});
+		addAcompanhamento.setBounds(305, 81, 89, 23);
+		getContentPane().add(addAcompanhamento);
+
+		JButton addLanche = new JButton("Adicionar");
+		addLanche.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				adicionarLanche();
+				atualizarValor();
+			}
+		});
+		addLanche.setBounds(305, 140, 89, 23);
+		getContentPane().add(addLanche);
+
+		JButton addBebida = new JButton("Adicionar");
+		addBebida.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				adicionarBebida();
+				atualizarValor();
+			}
+		});
+		addBebida.setBounds(305, 196, 89, 23);
+		getContentPane().add(addBebida);
+
+		JButton btnAdicionarItens = new JButton("Adicionar Itens");
+		btnAdicionarItens.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				adicionarAcomp();
+				adicionarLanche();
+				adicionarBebida();
+				atualizarValor();
+			}
+		});
+		btnAdicionarItens.setBounds(308, 251, 122, 23);
+		getContentPane().add(btnAdicionarItens);
+		ValorConta.setEnabled(false);
+
+		dadosCompra = new JTextArea();
+		dadosCompra.setBounds(27, 295, 354, 109);
+		dadosCompra.setEnabled(false);
+		JScrollPane scrooll = new JScrollPane(dadosCompra);
+		scrooll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrooll.setBorder(BorderFactory.createCompoundBorder(BorderFactory
+				.createCompoundBorder(
+						BorderFactory.createTitledBorder("Informações pedido"),
+						BorderFactory.createEmptyBorder(5, 5, 5, 5)), scrooll
+				.getBorder()));
+		scrooll.setPreferredSize(new Dimension(250, 250));
+		scrooll.setBounds(27, 295, 354, 109);
+		getContentPane().add(scrooll);
+		
+		menuBar = new JMenuBar();
+		opcoes = new JMenu("Opções");
+		sair = new JMenuItem("Sair");
+		setJMenuBar(menuBar);
+		
+		menuBar.add(opcoes);
+		sobre = new JMenuItem("Sobre");
+		opcoes.add(sobre);
+		menuBar.add(sair);
+		
+		sair.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				int resposta;
+				resposta = JOptionPane.showConfirmDialog(null,"Deseja realmente sair?","Mensagem do Programa",JOptionPane.YES_NO_OPTION);
+				if (resposta == 0)
+					System.exit(0);
+			}
+		});
+		
+		sobre.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				JOptionPane.showMessageDialog(null, "Software desenvolvido para a empresa BBurger," 
+			+"que permite que cada cliente escolha seu pedido! \nVersão 2.0 ","Sobre", 1);
+			}
+		});
+		
+		addComboBox();
+		setVisible(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	public static void main(String args[]) {
+		new Principal();
+		
+	}
+
+	
+	
+	public int obterCodUltimoPedido() {
+		Connection conexao = new Conexao().geraConexao();
+		PreparedStatement sqlParametro = null;
+		ResultSet resultado = null;
+		int codigo = 0;
+		String sql;
+
+		try {
+			sql = "select cod_pedido as Codigo from pedido order by Codigo desc limit 1;";
+			sqlParametro = conexao.prepareStatement(sql);
+			resultado = sqlParametro.executeQuery();
+			if (resultado.next()) {
+				codigo = resultado.getInt("Codigo");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				sqlParametro.close();
+				conexao.close();
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
+		}
+
+		System.out.println(codigo);
+
+		return codigo;
+
+	}
+
+//	Verifica se nenhum checkbox foi selecionado
+	public boolean notSelect() {
+		if (rbOferta1.isSelected() == true || rbOferta2.isSelected() == true) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	
+	public void removeAll() {
+		
+			while(ip.isEmpty() == false){
+				ip.remove(0);
+			}
+
+			while(bebida.isEmpty() == false){
+				bebida.remove(0);
+			}
+			while(acomp.isEmpty() == false){
+				acomp.remove(0);
+			}
+			while(lanche.isEmpty() == false){
+				lanche.remove(0);
+			}
+		
+		contBebida = 1;
+		contLanche = 1;
+		contAcomp = 1;
+		cont = 0;
+		text = "";
+	}
+
+	public void addComboBox() {
+		removeAll();
+		if (rbOferta1.isSelected() == true) {
+			bebida = b.buscarPorPromocao(1);
+			acomp = a.buscarPorPromocao(1);
+			lanche = l.buscarPorPromocao(1);
+			adicionarComboBox(bebida, lanche, acomp);
+		} else if (rbOferta2.isSelected() == true) {
+			bebida = b.buscarPorPromocao(2);
+			acomp = a.buscarPorPromocao(2);
+			lanche = l.buscarPorPromocao(2);
+			adicionarComboBox(bebida, lanche, acomp);
+		} else {
+			bebida.addAll(b.listar());
+			lanche.addAll(l.listar());
+			acomp.addAll(a.listar());
+
+			adicionarComboBox(bebida, lanche, acomp);
+
+		}
+
+	}
+
+	public void removerComboBox() {
+		cbAcompanhamento.removeAllItems();
+		cbBebida.removeAllItems();
+		cbLanche.removeAllItems();
+	}
+
+	public void adicionarComboBox(List<Bebida> be, List<Lanche> lan,
+			List<Acompanhamento> acom) {
+		for (Bebida d : be) {
+			cbBebida.addItem(contBebida + " - " + d.getNom_bebida() + ": R$"
+					+ d.getVal_bebida());
+			contBebida++;
+		}
+		for (Acompanhamento p : acom) {
+			cbAcompanhamento.addItem(contAcomp + " - " + p.getNom_acomp()
+					+ ": R$" + p.getVal_acomp());
+			contAcomp++;
+			;
+		}
+		for (Lanche la : lan) {
+			cbLanche.addItem(contLanche + " - " + la.getNom_lanche() + ": R$"
+					+ la.getVal_lanche());
+			contLanche++;
+		}
+	}
+
+	//acao efetuada sempre que uma opcao for alterada na tela, por exemplo quando escolher listar itens pela oferta
+	public double atualizarValor() {
+		double resultado = 0;
+		double valorDesconto = 0;
+
+		for (ItemPedido p : ip) {
+			resultado += p.getVal_item();
+		}
+		
+		if (rbOferta1.isSelected() == true) {
+			valorDesconto = resultado- (resultado * ((100 - obterDesconto(1)) / 100));
+			System.out.println("Valor Desconto:" + valorDesconto);
+		} else if (rbOferta2.isSelected() == true) {
+			valorDesconto = resultado- (resultado * ((100 - obterDesconto(2)) / 100));
+			System.out.println("Valor Desconto:" + valorDesconto+ "|"+obterDesconto(2));
+		}
+		System.out.println("Resultado sem desconto: "+resultado);
+		resultado -=  valorDesconto;
+		ValorConta.setText("R$" + resultado);
+
+		return resultado;
+	}
+
+	public void adicionarAcomp() {
+		temp = cbAcompanhamento.getSelectedItem().toString();
+		char ch[] = temp.toCharArray();
+		int i;
+		i = Integer.parseInt(ch[0] + "") - 1;
+		ItemPedido itPedido = new ItemPedido();
+		itPedido.setCod_item(acomp.get(i).getCod_acomp());
+		itPedido.setTipo("Acompanhamento");
+		itPedido.setVal_item(acomp.get(i).getVal_acomp());
+		itPedido.setCod_pedido(obterCodUltimoPedido()+1);
+		if (text.equals("")) {
+			text = "\nItem:" + acomp.get(i).getNom_acomp() + "|Valor: R$"
+					+ acomp.get(i).getVal_acomp();
+		} else {
+			text += "\nItem:" + acomp.get(i).getNom_acomp() + "|Valor: R$"
+					+ acomp.get(i).getVal_acomp();
+		}
+		calcularTempoEspera(acomp.get(i).getTempo_espera());
+		ip.add(itPedido);
+		dadosCompra.setText(text);
+	}
+
+	public void adicionarBebida() {
+		temp = cbBebida.getSelectedItem().toString();
+		char ch[] = temp.toCharArray();
+		int i;
+		i = Integer.parseInt(ch[0] + "") - 1;
+		ItemPedido itPedido = new ItemPedido();
+		itPedido.setCod_item(bebida.get(i).getCod_bebida());
+		itPedido.setTipo("Bebida");
+		itPedido.setVal_item(bebida.get(i).getVal_bebida());
+		itPedido.setCod_pedido(obterCodUltimoPedido()+1);
+		if (text.equals("")) {
+			text = "\nItem:" + bebida.get(i).getNom_bebida() + "|Valor: R$"
+					+ bebida.get(i).getVal_bebida();
+		} else {
+			text += "\nItem:" + bebida.get(i).getNom_bebida() + "|Valor: R$"
+					+ bebida.get(i).getVal_bebida();
+		}
+		calcularTempoEspera(bebida.get(i).getTempo_espera());
+		ip.add(itPedido);
+		dadosCompra.setText(text);
+	}
+
+	public void adicionarLanche() {
+		temp = cbAcompanhamento.getSelectedItem().toString();
+		char ch[] = temp.toCharArray();
+		int i;
+		i = Integer.parseInt(ch[0] + "") - 1;
+		ItemPedido itPedido = new ItemPedido();
+		itPedido.setCod_item(lanche.get(i).getCod_lanche());
+		itPedido.setTipo("Lanche");
+		itPedido.setVal_item(lanche.get(i).getVal_lanche());
+		itPedido.setCod_pedido(obterCodUltimoPedido()+1);
+		if (text.equals("")) {
+			text = "\nItem:" + lanche.get(i).getNom_lanche() + "|Valor: R$"
+					+ lanche.get(i).getVal_lanche();
+		} else {
+			text += "\nItem:" + lanche.get(i).getNom_lanche() + "|Valor: R$"
+					+ lanche.get(i).getVal_lanche();
+		}
+		calcularTempoEspera(lanche.get(i).getTempo_espera());
+		ip.add(itPedido);
+		dadosCompra.setText(text);
+	}
+
+	public double obterDesconto(int codigo) {
+		Connection conexao = new Conexao().geraConexao();
+		PreparedStatement sqlParametro = null;
+		ResultSet resultado = null;
+		String sql;
+
+		try {
+			sql = "select val_desconto as valor from promocao where cod_promocao = ?";
+			sqlParametro = conexao.prepareStatement(sql);
+			sqlParametro.setInt(1, codigo);
+			resultado = sqlParametro.executeQuery();
+			if (resultado.next()) {
+				codigo = resultado.getInt("valor");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				sqlParametro.close();
+				conexao.close();
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
+		}
+
+		System.out.println(codigo);
+
+		return codigo;
+	}
+	
+	public void calcularTempoEspera(int tempo_item){
+		if(tempo_item>tempo_espera){
+			tempo_espera = tempo_item;
+		}
+	}
+	
+	public void limpar(){
+		ValorConta.setText("");
+		dadosCompra.setText("");
+
+		text = "";
+		adicionarComboBox(bebida, lanche, acomp);
+	}
+}

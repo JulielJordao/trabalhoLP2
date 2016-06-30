@@ -5,7 +5,7 @@ public class Pedido {
 	private double val_pedido;
 	private String dat_pedido;
 	private int cod_desconto;
-	
+	 
 	public void setCod_pedido(int cod_pedido){
 		this.cod_pedido = cod_pedido; 
 	}

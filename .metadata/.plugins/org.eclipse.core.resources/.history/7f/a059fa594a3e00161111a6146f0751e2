@@ -1,0 +1,40 @@
+package visao;
+
+import javax.swing.JFrame;
+import javax.swing.JTable;
+
+import controle.BLLItemPedido;
+import entidade.ItemPedido;
+
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JScrollBar;
+
+public class PainelAdministrativo extends JFrame {
+	
+	public PainelAdministrativo() {
+		super("Painel Administrativo");
+		getContentPane().setLayout(null);
+		String[] colunas = { "Pedido", "Itens", "Hora do pedido" };
+		ArrayList<ItemPedido> it = new ArrayList<>();
+		BLLItemPedido obterPedidos = new BLLItemPedido();
+		it = obterPedidos.listar();
+		ItemPedido tempIt = new ItemPedido();
+		String[][] itens = new String[3][500];
+		for(it : tempIt){
+			
+		};
+		JTable tabAdministrativo = new JTable(colunas,);
+		
+		tabAdministrativo.setBounds(10, 68, 412, 96);
+		getContentPane().add(tabAdministrativo);
+		JButton btnModficarEntregues = new JButton("Modificar Entregues");
+		btnModficarEntregues.setBounds(297, 181, 125, 23);
+		getContentPane().add(btnModficarEntregues);
+		
+		JScrollBar scrollBar = new JScrollBar();
+		scrollBar.setBounds(402, 68, 17, 91);
+		getContentPane().add(scrollBar);
+	}
+}

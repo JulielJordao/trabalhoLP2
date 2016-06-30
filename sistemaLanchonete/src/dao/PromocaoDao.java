@@ -20,7 +20,7 @@ public class PromocaoDao {
 		ResultSet resultado = null;
 		int codigo = 0;
 		String sql;
-
+		
 		try {
 			if (entidade.getCod_promocao() == 0) {
 				sql = "insert into Promocao(val_desconto) values(?, ?)";
@@ -106,8 +106,8 @@ public class PromocaoDao {
 	}
 
 	public Promocao buscarPorCodigo(int codigo) {
-
-		Connection conexao = new Conexao().geraConexao();
+  
+		 Connection conexao = new Conexao().geraConexao();
 		PreparedStatement consulta = null;
 		ResultSet resultado = null;
 		Promocao entidade = null;
@@ -135,4 +135,6 @@ public class PromocaoDao {
 		}
 		return entidade;
 	}
+	
+	
 }

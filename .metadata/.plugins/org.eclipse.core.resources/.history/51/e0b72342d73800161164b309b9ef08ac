@@ -1,0 +1,11 @@
+package visao;
+
+import javax.swing.JFrame;
+
+public class PainelAdministrativo extends JFrame {
+	public PainelAdministrativo() {
+		super("Painel Administrativo");
+	}
+	
+	
+}

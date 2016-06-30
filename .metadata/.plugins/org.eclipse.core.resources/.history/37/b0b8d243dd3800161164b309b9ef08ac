@@ -1,0 +1,13 @@
+package visao;
+
+import javax.swing.JFrame;
+import javax.swing.JTable;
+
+public class PainelAdministrativo extends JFrame {
+	public PainelAdministrativo() {
+		super("Painel Administrativo");
+		JTable tabAdministratico = new JTable(6,6);
+	}
+	
+	
+}

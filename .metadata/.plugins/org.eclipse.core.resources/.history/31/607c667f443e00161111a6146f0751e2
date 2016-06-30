@@ -1,0 +1,26 @@
+package visao;
+
+import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.JButton;
+import javax.swing.JScrollBar;
+
+public class PainelAdministrativo extends JFrame {
+	
+	public PainelAdministrativo() {
+		super("Painel Administrativo");
+		getContentPane().setLayout(null);
+		JTable tabAdministrativo = new JTable(6,6);
+		
+		tabAdministrativo.setBounds(10, 68, 412, 96);
+		getContentPane().add(tabAdministrativo);
+		String[] colunas = { "Pedido", "Itens", "Hora do pedido" };
+		JButton btnModficarEntregues = new JButton("Modificar Entregues");
+		btnModficarEntregues.setBounds(297, 181, 125, 23);
+		getContentPane().add(btnModficarEntregues);
+		
+		JScrollBar scrollBar = new JScrollBar();
+		scrollBar.setBounds(402, 68, 17, 91);
+		getContentPane().add(scrollBar);
+	}
+}

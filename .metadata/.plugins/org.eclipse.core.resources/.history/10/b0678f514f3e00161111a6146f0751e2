@@ -1,0 +1,12 @@
+package visao;
+
+import javax.swing.JFrame;
+
+public class TelaFecharPedido extends JFrame {
+
+	TelaFecharPedido() {
+		super("Informações finais");
+		setSize(400, 310);
+		
+	}
+}

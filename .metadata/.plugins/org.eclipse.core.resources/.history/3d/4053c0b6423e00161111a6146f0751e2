@@ -1,0 +1,40 @@
+package entidade;
+
+public class ItemPedido {
+	private int cod_itemPedido;
+	private String tipo;
+	private int cod_pedido;
+	private int cod_item;
+	private double val_item;
+	private int tempo_espera;
+	public int getCod_item() {
+		return cod_item;
+	}
+	public void setCod_item(int cod_item) {
+		this.cod_item = cod_item;
+	}
+	public String getTipo() {
+		return tipo;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	public int getCod_pedido() {
+		return cod_pedido;
+	}
+	public void setCod_pedido(int cod_pedido) {
+		this.cod_pedido = cod_pedido;
+	}
+	public int getCod_itemPedido() {
+		return cod_itemPedido;
+	}
+	public void setCod_itemPedido(int cod_itemPedido) {
+		this.cod_itemPedido = cod_itemPedido;
+	}
+	public double getVal_item() {
+		return val_item;
+	}
+	public void setVal_item(double val_item) {
+		this.val_item = val_item;
+	}
+}

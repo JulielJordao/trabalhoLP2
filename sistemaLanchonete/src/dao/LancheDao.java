@@ -94,6 +94,7 @@ public class LancheDao {
 				entidade.setVal_lanche(resultado.getDouble("val_lanche"));
 				entidade.setNom_lanche(resultado.getString("nom_lanche"));
 				entidade.setCod_promocao(resultado.getInt("cod_promocao"));
+				entidade.setTempo_espera(resultado.getInt("tempo_espera"));
 				lista.add(entidade);
 			}
 		} catch (SQLException e) {
@@ -128,6 +129,7 @@ public class LancheDao {
 				entidade.setVal_lanche(resultado.getDouble("val_lanche"));
 				entidade.setNom_lanche(resultado.getString("nom_lanche"));
 				entidade.setCod_promocao(resultado.getInt("cod_promocao"));
+				entidade.setTempo_espera(resultado.getInt("tempo_espera"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -160,6 +162,7 @@ public class LancheDao {
 				entidade.setVal_lanche(resultado.getDouble("val_lanche"));
 				entidade.setNom_lanche(resultado.getString("nom_lanche"));
 				entidade.setCod_promocao(resultado.getInt("cod_promocao"));
+				entidade.setTempo_espera(resultado.getInt("tempo_espera"));
 				lista.add(entidade);
 			}
 		} catch (SQLException e) {
